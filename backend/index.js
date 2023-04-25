@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const products = require("./products")
 
 const app = express();
+
+require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
@@ -17,5 +20,15 @@ app.get("/products", (req, res) => {
   });
 
 const port = process.env.PORT || 5000;
+const uri =  process.env.DB_URI;
 
 app.listen(port, console.log(`Server running on port 5000 ${port}`));
+
+
+mongoose
+   .connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongDB Connection Successful...")) 
+.catch((err) => console.log("MongDB Connection failed", err.message));
